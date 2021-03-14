@@ -25,3 +25,6 @@ hs_err_pid*
 # visual paradigm
 *.vpp.bak*
 *.vpp.lck
+
+#mac
+.DS_Store
