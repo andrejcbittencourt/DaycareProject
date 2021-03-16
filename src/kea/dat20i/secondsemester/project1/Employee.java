@@ -1,3 +1,5 @@
+package kea.dat20i.secondsemester.project1;
+
 public class Employee {
   private final String username;
   private final String password;

@@ -1,3 +1,5 @@
+package kea.dat20i.libraries;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

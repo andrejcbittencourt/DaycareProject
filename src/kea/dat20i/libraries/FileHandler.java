@@ -1,7 +1,9 @@
+package kea.dat20i.libraries;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-// class used to handle several FileIO classes
+// class used to handle several kea.dat20i.libraries.FileIO classes
 public class FileHandler implements Handler {
 	private final ArrayList<FileIO> files;
 
