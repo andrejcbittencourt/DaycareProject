@@ -1,2 +1,2 @@
-public enum ACL {
+public class ACL {
 }
