@@ -27,5 +27,15 @@ hs_err_pid*
 *.vpp.lck
 *.vpp.vbak
 
-#mac
+# mac
 .DS_Store
+
+# intellij
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
