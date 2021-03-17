@@ -25,8 +25,8 @@ public class Console {
       if(!validInput.isEmpty()&&!input.matches(validInput))
         throw new InputMismatchException();
     } catch (InputMismatchException e) {
-      this.clear();
-      this.cursorPosition(0,0);
+      //this.clear();
+      //this.cursorPosition(0,0);
       System.out.println("Error: "+((errorMessage.isEmpty())?"Invalid input.":errorMessage));
       scan.nextLine();
       input = "";
