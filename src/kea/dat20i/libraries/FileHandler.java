@@ -8,7 +8,7 @@ public class FileHandler implements Handler {
 	private final ArrayList<FileIO> files;
 
 	// constructor
-	FileHandler() {
+	public FileHandler() {
 		this.files = new ArrayList<>();
 	}
 
