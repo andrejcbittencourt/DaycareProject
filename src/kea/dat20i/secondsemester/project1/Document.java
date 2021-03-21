@@ -31,7 +31,7 @@ public class Document {
     ArrayList<String> formattedCells = new ArrayList<>();
     int columnCount = 0;
     int rowCount = 0;
-    int formattedCellsSize = formattedCells.size();
+    int formattedCellsSize = 0;
     for(String cell: cells) {
       if(columnCount >= documentSize) { // if vertical
         columnCount = 0;
