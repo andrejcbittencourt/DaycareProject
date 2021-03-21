@@ -42,6 +42,6 @@ public class RDAS {
     data.add("Free");
     data.add("Free");
     doc.setData(data);
-    doc.display(15, 5);
+    doc.display(0, 0);
   }
 }

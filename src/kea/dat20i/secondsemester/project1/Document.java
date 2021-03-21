@@ -32,6 +32,8 @@ public class Document {
     int columnCount = 0;
     int rowCount = 0;
     int formattedCellsSize = 0;
+    cellSize = Math.max(cellSize, 1);
+    cellMargin = Math.max(cellMargin, 1);
     for(String cell: cells) {
       if(columnCount >= documentSize) { // if vertical
         columnCount = 0;
