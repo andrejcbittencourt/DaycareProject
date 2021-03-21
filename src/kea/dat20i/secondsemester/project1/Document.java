@@ -10,6 +10,7 @@ public class Document {
   Document(String name, ArrayList<String> columns) {
     this.name = name;
     this.columns = columns;
+    this.data = new ArrayList<>();
   }
   Document(String name, ArrayList<String> columns, ArrayList<String> data) {
     this.name = name;
