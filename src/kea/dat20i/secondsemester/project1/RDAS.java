@@ -15,17 +15,25 @@ public class RDAS {
 
     // test area
     ArrayList<String> columns = new ArrayList<>();
-    columns.add("Time");
-    columns.add("Monday");
-    columns.add("Tuesday");
-    columns.add("Wednesday");
-    columns.add("Thursday");
-    columns.add("Friday");
-    columns.add("Saturday");
-    columns.add("Sunday");
+    columns.add("Column 1");
+    columns.add("Column 2");
+    columns.add("Column 3");
+    columns.add("Column 4");
+    columns.add("Column 5");
+    columns.add("Column 6");
+    columns.add("Column 7");
+    columns.add("Column 8");
     Document doc = new Document("workSchedule.txt", columns);
     ArrayList<String> data = new ArrayList<>();
     data.add("08:00");
+    data.add("Software Design");
+    data.add("Programming");
+    data.add("ITO");
+    data.add("Technology");
+    data.add("Programming - this class is canceled on week 17");
+    data.add("Free");
+    data.add("Free");
+    data.add("09:00");
     data.add("Software Design");
     data.add("Programming");
     data.add("ITO");
@@ -34,6 +42,6 @@ public class RDAS {
     data.add("Free");
     data.add("Free");
     doc.setData(data);
-    doc.display();
+    doc.display(20, 4);
   }
 }
