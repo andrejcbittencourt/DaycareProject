@@ -45,7 +45,7 @@ public class Document {
           formattedCells.add("");
         // add spacing accordingly
         String spacing = "";
-        for (int i = 0; i < ((columnCount * cellSize) - formattedCells.get(currentRow).length() + (cellMargin * columnCount)); i++)
+        for (int i = 0; i < ((columnCount * cellSize) - formattedCells.get(currentRow).length() + ((cellMargin+3) * columnCount)); i++)
           spacing += " ";
         formattedCells.set(currentRow, formattedCells.get(currentRow) + spacing);
         String text = "";
