@@ -72,9 +72,9 @@ public class Document {
     document.addAll(formatWrap(cellSize, cellMargin, columns.size(), columns, false));
     // add horizontal line
     document.add("");
-
     // text wrap the data cells
-    document.addAll(formatWrap(cellSize, cellMargin, columns.size(), data, true));
+    if(data.size()>0)
+      document.addAll(formatWrap(cellSize, cellMargin, columns.size(), data, true));
     // display the document
     StringBuilder result = new StringBuilder();
     result.append("Document: ").append(this.name).append("\n");
