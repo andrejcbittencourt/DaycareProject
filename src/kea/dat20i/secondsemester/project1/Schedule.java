@@ -2,7 +2,6 @@ package kea.dat20i.secondsemester.project1;
 
 import kea.dat20i.libraries.FileHandler;
 import kea.dat20i.libraries.Handler;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
