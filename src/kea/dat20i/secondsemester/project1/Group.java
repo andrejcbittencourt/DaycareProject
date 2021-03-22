@@ -15,7 +15,7 @@ public class Group {
   public void addEmployee(String employee) {
     this.employees.add(employee);
   }
-  public void addACL(String document, Permission permission) {
+  public void addAccessControl(String document, Permission permission) {
     this.accessControlList.add(new AccessControl(document, permission));
   }
   public Permission getPermission(String document) {
