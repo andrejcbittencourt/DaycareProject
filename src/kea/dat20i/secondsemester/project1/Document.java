@@ -42,20 +42,19 @@ public class Document {
         if (formattedCells.size() < currentRow + 1) // add new row if doesn't exit
           formattedCells.add("");
         // add spacing accordingly
-        String spacing = "";
-        for (int i = 0; i < ((columnCount * cellSize) - formattedCells.get(currentRow).length() + ((cellMargin+3) * columnCount)); i++)
-          spacing += " ";
-        formattedCells.set(currentRow, formattedCells.get(currentRow) + spacing);
-        String text = "";
+        StringBuilder spacing = new StringBuilder();
+        spacing.append(" ".repeat(Math.max(0, ((columnCount * cellSize) - formattedCells.get(currentRow).length() + ((cellMargin + 3) * columnCount)))));
+        formattedCells.set(currentRow, formattedCells.get(currentRow) + spacing.toString());
+        StringBuilder text = new StringBuilder();
         for(int i=0; i<cellSize; i++) {
           try {
-            text += cell.charAt(0);
+            text.append(cell.charAt(0));
             cell = cell.substring(1);
           } catch(Exception e) { // no more text
             break;
           }
         }
-        formattedCells.set(currentRow, formattedCells.get(currentRow) + (vertical?(columnCount==0?rowCount+1:" "):columnCount+1) + "| " + text);
+        formattedCells.set(currentRow, formattedCells.get(currentRow) + (vertical?(columnCount==0?rowCount+1:" "):columnCount+1) + "| " + text.toString());
         currentRow++;
       }
       columnCount++;
@@ -70,7 +69,7 @@ public class Document {
     // text wrap the columns
     document.addAll(formatWrap(cellSize, cellMargin, columns.size(), columns, false));
     // add horizontal line
-    document.add("");
+    document.add("-".repeat(document.get(0).length()));
     // text wrap the data cells
     if(data.size()>0)
       document.addAll(formatWrap(cellSize, cellMargin, columns.size(), data, true));
