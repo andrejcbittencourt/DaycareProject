@@ -12,11 +12,7 @@ public class Document {
     this.columns = columns;
     this.data = new ArrayList<>();
   }
-  Document(String name, ArrayList<String> columns, ArrayList<String> data) {
-    this.name = name;
-    this.columns = columns;
-    this.data = data;
-  }
+
   public ArrayList<String> getData() {
     return this.data;
   }
