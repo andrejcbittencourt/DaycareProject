@@ -79,6 +79,6 @@ public class Document {
     for(String row: document) {
       result.append(row).append("\n");
     }
-    System.out.println(result);
+    System.out.println(result.toString());
   }
 }
