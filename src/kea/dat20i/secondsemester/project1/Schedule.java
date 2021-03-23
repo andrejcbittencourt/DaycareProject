@@ -17,8 +17,8 @@ public class Schedule {
 
 
     public void editSchedule() throws FileNotFoundException {
-        h.newFile("Columns");
-        h.newFile("Data");
+        h.newFile("src/kea/dat20i/secondsemester/project1/data/ScheduleColumns.txt");
+        h.newFile("src/kea/dat20i/secondsemester/project1/data/ScheduleData.txt");
 
 
         if(!(h.fileExists(0) & h.fileExists(1))){
@@ -65,8 +65,8 @@ public class Schedule {
 
 
         }else{
-            Scanner c = new Scanner(new File("columns"));
-            Scanner d = new Scanner(new File("data"));
+            Scanner c = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ScheduleColumns.txt"));
+            Scanner d = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ScheduleData.txt"));
 
             while (c.hasNext()){
                 columns.add(c.next());
@@ -88,10 +88,17 @@ public class Schedule {
 
         for (int x = 0; x <= 64; x++){
             if (!(x == 0 | x == 8 | x == 16 | x == 24 | x == 32 | x == 40 | x == 48 | x == 56)){
-                data.set(x,"?");
+                data.set(x,"Input ?");
 
                 doc.setData(data);
                 doc.display(20, 1);
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
+                System.out.println("Please enter your input");
+                System.out.println("Note that when a ''space'' is inserted a next cell will be written");
+                System.out.println("");
+                System.out.println("");
 
                 w = sc.next();
                 data.set(x,w);
@@ -112,8 +119,8 @@ public class Schedule {
 
 }
 public void seeSchedule() throws FileNotFoundException {
-    Scanner c = new Scanner(new File("columns"));
-    Scanner d = new Scanner(new File("data"));
+    Scanner c = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ScheduleColumns.txt"));
+    Scanner d = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ScheduleData.txt"));
 
     while (c.hasNext()){
         columns.add(c.next());
@@ -129,12 +136,4 @@ public void seeSchedule() throws FileNotFoundException {
             doc.setData(data);
             doc.display(20, 1);
 }
-}
-class Test {
-    public static void main(String[] args) throws FileNotFoundException {
-        Schedule s = new Schedule();
-        //s.editSchedule();
-        s.seeSchedule();
-    }
-
 }
