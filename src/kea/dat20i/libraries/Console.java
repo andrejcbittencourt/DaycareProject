@@ -17,7 +17,7 @@ public class Console {
     }
     menu.append(": ");
     // handles the user input
-    System.out.print(menu.toString());
+    print(menu.toString());
     String input = "";
     try {
       input = scan.next();
@@ -27,11 +27,21 @@ public class Console {
     } catch (InputMismatchException e) {
       //this.clear();
       //this.cursorPosition(0,0);
-      System.out.println("Error: "+((errorMessage.isEmpty())?"Invalid input.":errorMessage));
+      println("Error: "+((errorMessage.isEmpty())?"Invalid input.":errorMessage));
       scan.nextLine();
       input = "";
     }
     return input;
+  }
+
+  // print string to the console
+  public void print(String text) {
+    System.out.print(text);
+  }
+
+  // println string to the console
+  public void println(String text) {
+    System.out.println(text);
   }
 
   // ANSI ESCAPE CODES
