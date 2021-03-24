@@ -1,34 +1,60 @@
 package kea.dat20i.secondsemester.project1;
 
 import kea.dat20i.libraries.*;
-
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class RDAS {
 
   public static void main(String[] args) {
     // manage console input/output
     Console console = new Console();
-    // file handler
-    FileHandler fileHandler = new FileHandler();
-    String fileBasePath = "src/kea/dat20i/secondsemester/project1/data/";
-    String fileExtension = ".txt";
+
+    // data handler
+    FileHandler dataHandler = new FileHandler();
+    String dataBasePath = "src/kea/dat20i/secondsemester/project1/data/";
+    String dataExtension = ".dat";
+
+    // initialize data
+    String name = "Roskilde Daycare Administrative System"; // program name
+    // load employees
+    ArrayList<Employee> employees = new ArrayList<>();
+    try {
+      int employeesData = dataHandler.newFile(dataBasePath + "employees" + dataExtension);
+      Scanner buffer = new Scanner(dataHandler.loadFile(employeesData));
+      buffer.useDelimiter(";|\n");
+      while(buffer.hasNext()) {
+        employees.add(new Employee(buffer.next(), buffer.next(), buffer.nextBoolean(), buffer.next()));
+      }
+    } catch (Exception e) {
+      console.println("Error loading data.");
+      e.printStackTrace();
+      System.exit(1);
+    }
 
     while(true) {
-      // welcome
-      console.println("Roskilde Daycare Administrative System\n");
+      // print name
+      console.println(name);
 
       // login
       String inputUsername = console.getInput("Please Login;username", "", "");
       String inputPassword = console.getInput("password", "", "");
 
-      // employee file
-      int employeeFile = fileHandler.newFile(fileBasePath + "employees/" + inputUsername + fileExtension); // data/employees/username.txt
-
-      if (fileHandler.fileExists(employeeFile)) { // if file doesn't exist, then the login is invalid
-        console.println("one step closer.");
+      Employee loginEmployee = null;
+      for(Employee employee: employees) {
+        if(employee.getUsername().equals(inputUsername))
+          if(employee.authenticate(inputUsername, inputPassword)) {
+            console.println("Welcome " + employee.getName() + (employee.is_admin()?" (admin)":""));
+            loginEmployee = employee;
+          }
+      }
+      if(loginEmployee != null) {
+        while(true) {
+          // TODO: implement all the UC here
+          break;
+        }
       } else
-        console.println("Invalid username and/or password.");
+        console.println("Invalid username/password.");
     }
   }
 }

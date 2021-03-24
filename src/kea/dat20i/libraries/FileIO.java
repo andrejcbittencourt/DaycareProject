@@ -1,9 +1,6 @@
 package kea.dat20i.libraries;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.Scanner;
 
 // class used for file IO operations
@@ -35,5 +32,9 @@ public class FileIO {
 
 	public Boolean exists() {
 		return this.file.exists();
+	}
+
+	public Boolean create() throws IOException {
+		return this.file.createNewFile();
 	}
 }

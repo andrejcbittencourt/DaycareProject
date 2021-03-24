@@ -1,6 +1,7 @@
 package kea.dat20i.libraries;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 // class used to handle several kea.dat20i.libraries.FileIO classes
@@ -21,6 +22,11 @@ public class FileHandler implements Handler {
 	@Override
 	public void saveFile(int index, String objects) throws FileNotFoundException {
 		files.get(index).write(objects);
+	}
+
+	@Override
+	public Boolean createFile(int index) throws IOException {
+		return files.get(index).create();
 	}
 
 	@Override
