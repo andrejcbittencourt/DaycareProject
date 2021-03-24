@@ -17,29 +17,40 @@ public class RDAS {
 
     // initialize data
     String name = "Roskilde Daycare Administrative System"; // program name
-    // load employees
     ArrayList<Employee> employees = new ArrayList<>();
+    int employeesData = dataHandler.newFile(dataBasePath + "employees" + dataExtension); // employee data file
+    ArrayList<Group> groups = new ArrayList<>();
+    int groupsData = dataHandler.newFile(dataBasePath + "groups" + dataExtension); // groups data file
+    ArrayList<Document> documents = new ArrayList<>();
+    int documentsData = dataHandler.newFile(dataBasePath + "documents" + dataExtension); // documents data file
+    ArrayList<Parent> parents = new ArrayList<>();
+    int parentsData = dataHandler.newFile(dataBasePath + "parents" + dataExtension); // parents data file
     try {
-      int employeesData = dataHandler.newFile(dataBasePath + "employees" + dataExtension);
+      // load employees
       Scanner buffer = new Scanner(dataHandler.loadFile(employeesData));
       buffer.useDelimiter(";|\n");
       while(buffer.hasNext()) {
         employees.add(new Employee(buffer.next(), buffer.next(), buffer.nextBoolean(), buffer.next()));
       }
-    } catch (Exception e) {
+      // load groups
+      // load parents
+    } catch (Exception e) { // catch file errors
       console.println("Error loading data.");
-      e.printStackTrace();
-      System.exit(1);
+      if(employees.size()<1) {
+        e.printStackTrace();
+        System.exit(1);
+      }
     }
 
     while(true) {
-      // print name
+      // RDAS
       console.println(name);
 
-      // login
+      // login input
       String inputUsername = console.getInput("Please Login;username", "", "");
       String inputPassword = console.getInput("password", "", "");
 
+      // authenticate
       Employee loginEmployee = null;
       for(Employee employee: employees) {
         if(employee.getUsername().equals(inputUsername))
@@ -48,9 +59,10 @@ public class RDAS {
             loginEmployee = employee;
           }
       }
-      if(loginEmployee != null) {
+      if(loginEmployee != null) { // if login was successful
         while(true) {
           // TODO: implement all the UC here
+
           break;
         }
       } else
