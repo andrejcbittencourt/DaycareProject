@@ -32,8 +32,75 @@ public class RDAS {
       while(buffer.hasNext()) {
         employees.add(new Employee(buffer.next(), buffer.next(), buffer.nextBoolean(), buffer.next()));
       }
-      // load groups
-      // load parents
+      // load groups & ACL
+      buffer = new Scanner(dataHandler.loadFile(groupsData));
+      buffer.useDelimiter(";|\n");
+      int index = 0;
+      while(buffer.hasNext()) {
+        groups.add(new Group(buffer.nextLine()));
+        // add documents & permissions
+        if(buffer.hasNextLine()) {
+          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer.useDelimiter(";");
+          while (subBuffer.hasNext()) {
+            groups.get(index).addAccessControl(subBuffer.next(), Permission.valueOf(subBuffer.next()));
+          }
+        }
+        // add employees
+        if(buffer.hasNextLine()) {
+          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer.useDelimiter(";");
+          while (subBuffer.hasNext()) {
+            groups.get(index).addEmployee(subBuffer.next());
+          }
+        }
+        index++;
+      }
+      // load parents & children
+      buffer = new Scanner(dataHandler.loadFile(parentsData));
+      buffer.useDelimiter(";|\n");
+      index = 0;
+      while(buffer.hasNext()) {
+        parents.add(new Parent(buffer.next(),buffer.next(),buffer.next()));
+        buffer.nextLine();
+        // add children
+        if(buffer.hasNextLine()) {
+          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer.useDelimiter(";");
+          while (subBuffer.hasNext()) {
+            parents.get(index).addChild(subBuffer.next(),subBuffer.nextInt());
+          }
+        }
+        index++;
+      }
+      // load documents
+      buffer = new Scanner(dataHandler.loadFile(documentsData));
+      buffer.useDelimiter("\n");
+      index = 0;
+      while(buffer.hasNext()) {
+        String docName = buffer.nextLine();
+        // columns
+        if(buffer.hasNextLine()) {
+          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer.useDelimiter(";");
+          ArrayList<String> docColumns = new ArrayList<>();
+          while (subBuffer.hasNext()) {
+            docColumns.add(subBuffer.next());
+          }
+          documents.add(new Document(docName, docColumns));
+        }
+        // data
+        if(buffer.hasNextLine()) {
+          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer.useDelimiter(";");
+          ArrayList<String> docData = new ArrayList<>();
+          while (subBuffer.hasNext()) {
+            docData.add(subBuffer.next());
+          }
+          documents.get(index).setData(docData);
+        }
+        index++;
+      }
     } catch (Exception e) { // catch file errors
       console.println("Error loading data.");
       if(employees.size()<1) {
@@ -61,9 +128,8 @@ public class RDAS {
       }
       if(loginEmployee != null) { // if login was successful
         while(true) {
-          // TODO: implement all the UC here
+          // TODO: UC(1,2,3,4) here
 
-          break;
         }
       } else
         console.println("Invalid username/password.");
