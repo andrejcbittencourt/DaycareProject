@@ -15,10 +15,12 @@ public class PhoneList {
     Scanner sc = new Scanner(System.in);
     String w = "";
     boolean add = true;
-    String option = "";
 
 
     public void editPhoneList() throws FileNotFoundException {
+        h.newFile("src/kea/dat20i/secondsemester/project1/data/ParentColumns.txt");
+        h.newFile("src/kea/dat20i/secondsemester/project1/data/PhoneListData.txt");
+
         Scanner c = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ParentColumns.txt"));
         Scanner d = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/PhoneListData.txt"));
 
@@ -51,15 +53,19 @@ public class PhoneList {
         doc.setData(data);
         doc.display(20, 1);
 
+        int count = data.size() - columns.size();
+
 
         while(add) {
+            System.out.println("works tile here");
 
 
-            for (int x = 0; x <= data.size() ; x++) {
+            for (int x = count; x <= data.size() -1; x++) {
                 data.set(x, "Input ?");
 
                 doc.setData(data);
                 doc.display(20, 1);
+
                 System.out.println("");
                 System.out.println("");
                 System.out.println("");
@@ -80,6 +86,10 @@ public class PhoneList {
                 h.saveFile(1, stringData.toString());
             }
 
+            doc.setData(data);
+            doc.display(20, 1);
+
+            String option = "";
             while(!(option.equals("y") | option.equals("n"))) {
                 System.out.println("Would you like to add more phone numbers ?");
                 System.out.println("y - yes");
@@ -87,13 +97,19 @@ public class PhoneList {
                 option = sc.next();
                 switch (option) {
                     case "y":
-                        while (c.hasNext()){
+                        int a = data.size();
+                        for (int x = 0; x <= columns.size() - 1; x++) {
                             data.add("-");
                         }
                         c.close();
+                        int b = data.size();
+                        count = count + columns.size();
+
+
                         break;
 
                     case "n":
+
                         add = false;
                         break;
 
@@ -128,12 +144,4 @@ public class PhoneList {
         doc.setData(data);
         doc.display(20, 1);
     }
-}
-class Test{
-    public static void main(String []args) throws FileNotFoundException {
-        PhoneList pl = new PhoneList();
-        pl.editPhoneList();
-        //pl.seePhoneList();
-    }
-
 }
