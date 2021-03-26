@@ -80,18 +80,16 @@ public class RDAS {
       while(buffer.hasNext()) {
         String docName = buffer.nextLine();
         // columns
-        if(buffer.hasNextLine()) {
-          Scanner subBuffer = new Scanner(buffer.nextLine());
-          subBuffer.useDelimiter(";");
-          ArrayList<String> docColumns = new ArrayList<>();
-          while (subBuffer.hasNext()) {
-            docColumns.add(subBuffer.next());
-          }
-          documents.add(new Document(docName, docColumns));
+        Scanner subBuffer = new Scanner(buffer.nextLine());
+        subBuffer.useDelimiter(";");
+        ArrayList<String> docColumns = new ArrayList<>();
+        while (subBuffer.hasNext()) {
+          docColumns.add(subBuffer.next());
         }
+        documents.add(new Document(docName, docColumns));
         // data
         if(buffer.hasNextLine()) {
-          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer = new Scanner(buffer.nextLine());
           subBuffer.useDelimiter(";");
           ArrayList<String> docData = new ArrayList<>();
           while (subBuffer.hasNext()) {
@@ -132,23 +130,38 @@ public class RDAS {
       if(loginEmployee != null) { // if login was successful
         menuLoop: while(true) {
           // menu
-          String menuOptions = "Menu:;1- Work Schedule;2- Telephone List;3- Parents Information;4- Waiting List;5- Log out";
+          String menuOptions = "Menu:;1- Work Schedule;2- Telephone List;3- Waiting List;4- Parents Information;5- Log out";
           String validMenuInput = "[12345]{1}";
           String menuChoice = console.getInput(menuOptions, validMenuInput, "");
-          switch (Integer.parseInt(menuChoice)) {
-            case 1:
-              // TODO: UC1
+          switch (menuChoice) {
+            case "1":
+              // TODO: UC1 - Work Schedule
               break;
-            case 2:
-              // TODO: UC2
+            case "2":
+              // TODO: UC2 - Phone List
               break;
-            case 3:
-              // TODO: UC3
+            case "3":
+              // TODO: UC3 - Waiting List
+              int index = 0;
+              for(Document document: documents) {
+                if(document.getName().equals("waitingList"))
+                  break;
+                index++;
+              }
+              while(true) {
+                documents.get(index).display(20, 1);
+                String wLMenuChoice = console.getInput("Choose an action;1- Edit;2- Go Back", "[12]{1}", "");
+                if(wLMenuChoice.equals("1")) {
+                  console.println("editing...");
+                } else if(wLMenuChoice.equals("2"))
+                  break;
+              }
               break;
-            case 4:
-              // TODO: UC4
+            case "4":
+              // TODO: UC4 - Parents information
+
               break;
-            case 5:
+            case "5":
               break menuLoop;
           }
         }
