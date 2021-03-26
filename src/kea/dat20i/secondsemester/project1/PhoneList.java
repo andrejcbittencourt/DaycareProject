@@ -57,7 +57,7 @@ public class PhoneList {
 
 
         while(add) {
-            System.out.println("works tile here");
+
 
 
             for (int x = count; x <= data.size() -1; x++) {
@@ -102,7 +102,7 @@ public class PhoneList {
                             data.add("-");
                         }
                         c.close();
-                        int b = data.size();
+
                         count = count + columns.size();
 
 
@@ -143,5 +143,13 @@ public class PhoneList {
 
         doc.setData(data);
         doc.display(20, 1);
+    }
+}
+class Test{
+    public static void main (String []args) throws FileNotFoundException {
+        //Schedule s = new Schedule();
+        PhoneList p = new PhoneList();
+        p.editPhoneList();
+        //s.editSchedule();
     }
 }
