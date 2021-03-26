@@ -34,7 +34,7 @@ public class RDAS {
       }
       // load groups & ACL
       buffer = new Scanner(dataHandler.loadFile(groupsData));
-      buffer.useDelimiter(";|\n");
+      buffer.useDelimiter("\n");
       int index = 0;
       while(buffer.hasNext()) {
         groups.add(new Group(buffer.nextLine()));
@@ -116,7 +116,7 @@ public class RDAS {
 
       // login input
       String inputUsername = console.getInput("Please Login;username", "", "");
-      if(inputUsername.equals("exit;"))
+      if(inputUsername.equals("exit;")) // if "exit;" then quit
         break;
       String inputPassword = console.getInput("password", "", "");
 
@@ -152,6 +152,51 @@ public class RDAS {
               break menuLoop;
           }
         }
+        // Store all the data back
+        StringBuilder dataToStore = new StringBuilder();
+        console.println("Saving data...");
+        // parents
+        for(Parent parent: parents) {
+          dataToStore.append(parent.getName()).append(";");
+          dataToStore.append(parent.getPhoneNumber()).append(";");
+          dataToStore.append(parent.getAddress()).append("\n");
+          ArrayList<String> children = parent.getChildrenName();
+          for(String child: children) {
+            dataToStore.append(child).append(";");
+            dataToStore.append(parent.getChildAge(child)).append(";");
+          }
+          dataToStore.delete(dataToStore.length()-1,dataToStore.length()).append("\n");
+        }
+        dataToStore.delete(dataToStore.length()-1,dataToStore.length());
+        try {
+          dataHandler.saveFile(parentsData, dataToStore.toString());
+        } catch(Exception e) {
+          console.println("Error saving parents.");
+          console.println(dataToStore.toString());
+        }
+        // documents
+        dataToStore = new StringBuilder();
+        for(Document doc: documents) {
+          dataToStore.append(doc.getName()).append("\n");
+          ArrayList<String> columns = doc.getColumns();
+          for(String column: columns) {
+            dataToStore.append(column).append(";");
+          }
+          dataToStore.delete(dataToStore.length()-1,dataToStore.length()).append("\n");
+          ArrayList<String> docData = doc.getData();
+          for(String data: docData) {
+            dataToStore.append(data).append(";");
+          }
+          dataToStore.delete(dataToStore.length()-1,dataToStore.length()).append("\n");
+        }
+        dataToStore.delete(dataToStore.length()-1,dataToStore.length());
+        try {
+          dataHandler.saveFile(documentsData, dataToStore.toString());
+        } catch(Exception e) {
+          console.println("Error saving documents.");
+          console.println(dataToStore.toString());
+        }
+        console.println("done.");
       } else
         console.println("Invalid username/password.");
     }
