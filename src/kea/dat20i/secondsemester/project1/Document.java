@@ -22,6 +22,9 @@ public class Document {
   public ArrayList<String> getColumns() {
     return this.columns;
   }
+  public String getName() {
+    return this.name;
+  }
 
   private ArrayList<String> formatWrap(int cellSize, int cellMargin, int documentSize, ArrayList<String> cells, Boolean vertical) {
     ArrayList<String> formattedCells = new ArrayList<>();
