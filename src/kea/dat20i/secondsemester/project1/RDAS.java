@@ -109,12 +109,15 @@ public class RDAS {
       }
     }
 
+    // main loop
     while(true) {
       // RDAS
       console.println(name);
 
       // login input
       String inputUsername = console.getInput("Please Login;username", "", "");
+      if(inputUsername.equals("exit;"))
+        break;
       String inputPassword = console.getInput("password", "", "");
 
       // authenticate
@@ -127,9 +130,27 @@ public class RDAS {
           }
       }
       if(loginEmployee != null) { // if login was successful
-        while(true) {
-          // TODO: UC(1,2,3,4) here
-
+        menuLoop: while(true) {
+          // menu
+          String menuOptions = "Menu:;1- Work Schedule;2- Telephone List;3- Parents Information;4- Waiting List;5- Log out";
+          String validMenuInput = "[12345]{1}";
+          String menuChoice = console.getInput(menuOptions, validMenuInput, "");
+          switch (Integer.parseInt(menuChoice)) {
+            case 1:
+              // TODO: UC1
+              break;
+            case 2:
+              // TODO: UC2
+              break;
+            case 3:
+              // TODO: UC3
+              break;
+            case 4:
+              // TODO: UC4
+              break;
+            case 5:
+              break menuLoop;
+          }
         }
       } else
         console.println("Invalid username/password.");
