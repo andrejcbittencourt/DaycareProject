@@ -1,12 +1,14 @@
 package kea.dat20i.secondsemester.project1;
 
 import kea.dat20i.libraries.*;
+
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class RDAS {
 
-  public static void main(String[] args) {
+  public static void main(String[] args){
     // manage console input/output
     Console console = new Console();
 

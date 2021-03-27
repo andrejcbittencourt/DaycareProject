@@ -1,5 +1,6 @@
 package kea.dat20i.secondsemester.project1;
 
+import kea.dat20i.libraries.Console;
 import kea.dat20i.libraries.FileHandler;
 import kea.dat20i.libraries.Handler;
 import java.io.File;
@@ -7,22 +8,75 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 public class PhoneList {
+    Handler h = new FileHandler();
+    String source = "src/kea/dat20i/secondsemester/project1/data/parents.dat";
+    ArrayList<Parent> parents = new ArrayList<>();
+    int parentsData = h.newFile(source);
+
     ArrayList<String> columns = new ArrayList<>();
     ArrayList<String> data = new ArrayList<>();
     Document doc = new Document("PhoneList.txt",columns);
-    Handler h = new FileHandler();
+
     Scanner sc = new Scanner(System.in);
     String w = "";
     boolean add = true;
 
 
     public void editPhoneList() throws FileNotFoundException {
+
+        Scanner buffer = new Scanner(h.loadFile(parentsData));
+        buffer.useDelimiter(";|\n");
+
+        while(buffer.hasNext()) {
+            parents.add(new Parent(buffer.next(), buffer.next(), buffer.next()));
+            buffer.nextLine();
+        }
+        System.out.println(parents.toString());
+
+            int pFinder = 3;
+            StringBuilder stringColumns = new StringBuilder();
+            String p = "";
+
+            for (Parent pa : parents)
+            {
+
+
+                if (pFinder % 3 == 0) {
+
+                    stringColumns.append(pa);
+                    stringColumns.append("\t");
+                    data.add("-");
+
+                }
+                pFinder ++;
+
+            }
+            p = stringColumns.toString();
+            columns.add(p);
+
+            /*
+            StringBuilder stringData = new StringBuilder();
+            for (String s : data)
+            {
+                stringData.append(s);
+                stringData.append("\t");
+            }
+            h.saveFile(1,stringData.toString());
+            */
+
+
+
+
+        /*
         h.newFile("src/kea/dat20i/secondsemester/project1/data/ParentColumns.txt");
         h.newFile("src/kea/dat20i/secondsemester/project1/data/PhoneListData.txt");
 
         Scanner c = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ParentColumns.txt"));
         Scanner d = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/PhoneListData.txt"));
+
 
         if(!( h.fileExists(1))){
             while (c.hasNext()){
@@ -49,7 +103,7 @@ public class PhoneList {
                 data.add(d.next());
             }
             d.close();
-        }
+        }*/
         doc.setData(data);
         doc.display(20, 1);
 
@@ -97,11 +151,10 @@ public class PhoneList {
                 option = sc.next();
                 switch (option) {
                     case "y":
-                        int a = data.size();
                         for (int x = 0; x <= columns.size() - 1; x++) {
                             data.add("-");
                         }
-                        c.close();
+
 
                         count = count + columns.size();
 
@@ -125,31 +178,14 @@ public class PhoneList {
     }
 
 
-    public void seePhoneList() throws FileNotFoundException {
+    /*public void seePhoneList() throws FileNotFoundException {
 
-        Scanner c = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/ParentColumns.txt"));
-        Scanner d = new Scanner(new File("src/kea/dat20i/secondsemester/project1/data/PhoneListData.txt"));
-
-        while (c.hasNext()){
-            columns.add(c.next());
-        }
-        c.close();
-
-        while (d.hasNext()){
-            data.add(d.next());
-        }
-        d.close();
-
-
-        doc.setData(data);
-        doc.display(20, 1);
-    }
+    }*/
 }
-class Test{
-    public static void main (String []args) throws FileNotFoundException {
-        //Schedule s = new Schedule();
+class test{
+    public static void main(String []args) throws FileNotFoundException {
         PhoneList p = new PhoneList();
         p.editPhoneList();
-        //s.editSchedule();
     }
+
 }
