@@ -137,11 +137,147 @@ public class RDAS {
           String menuChoice = console.getInput(menuOptions, validMenuInput, "");
           switch (menuChoice) {
             case "1":
-              // TODO: UC1 - Work Schedule
+
+
+
+
+              int scheduleListIndex = 0;
+              for (Document document: documents){
+                if (document.getName().equals("workSchedule")){
+                  break;
+                }
+                scheduleListIndex++;
+              }
+              documents.get(scheduleListIndex).display(20,1);
+
+              //option go back
+              //check permission
+              //option edit if editor
+
+
+
+
+
+
+
+              // select day and hour
+              String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
+              if(scheduleMenuChoice.equals("1")) {
+
+
+                scheduleLoop: while(true) {
+                  String scheuleValidInput = "[";
+                  for(int i = 0; i < documents.size(); i++)
+                    scheuleValidInput += i+1;
+                    scheuleValidInput += "]{1}";
+                  String selectedDay = console.getInput("Which column", scheuleValidInput,"");
+                  String selectedHour = console.getInput("Which row", scheuleValidInput,"");
+
+
+                  if(!selectedDay.isEmpty() & !selectedHour.isEmpty()) {
+                    scheduleMenuChoice = console.getInput("Choose an action;1- Edit;4- Go back", "[1234]{1}", "");
+                    switch (scheduleMenuChoice) {
+                      case "1":
+                        // edit schedule
+                        int selectedCell  = (Integer.parseInt(selectedHour)-1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay)-1);
+
+                        console.println("cell: "+documents.get(scheduleListIndex).getData().get(selectedCell));
+                        String newSchedule = console.getInput("Insert new activity","","");
+
+                        ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
+                        cellData.set(selectedCell,newSchedule);
+
+
+
+                        documents.get(scheduleListIndex).setData(cellData);
+                        break scheduleLoop;
+
+
+                      case "4": // go back
+                        break scheduleLoop;
+                    }
+                  }
+                }
+              } else if(scheduleMenuChoice.equals("2"))
+                break;
+
+
+
+
+
+
               break;
+
+
+
+
+
             case "2":
-              // TODO: UC2 - Phone List
+
+
+
+
+
+              // show phone list
+              ArrayList<String> phoneTmp = new ArrayList<>();
+              phoneTmp.add("Name");
+              phoneTmp.add("Phone Number");
+
+              Document phoneList = new Document("list", phoneTmp);
+              phoneTmp = new ArrayList<>();
+              for(Parent parent: parents) {
+                phoneTmp.add(parent.getName());
+                phoneTmp.add(parent.getPhoneNumber());
+
+              }
+              phoneList.setData(phoneTmp);
+              phoneList.display(20, 1);
+
+
+
+
+              // select number
+              String phoneMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
+              if(phoneMenuChoice.equals("1")) {
+                phoneLoop: while(true) {
+                  String phoneValidInput = "[";
+                  for(int i = 0; i < parents.size(); i++)
+                    phoneValidInput += i+1;
+                  phoneValidInput += "]{1}";
+                  String selectedParent = console.getInput("Which parent", phoneValidInput,"");
+
+
+                  if(!selectedParent.isEmpty()) {
+                    phoneMenuChoice = console.getInput("Choose an action;1- Edit this number;4- Go back", "[1234]{1}", "");
+                    switch (phoneMenuChoice) {
+                      case "1":
+                        // edit phone number
+                        console.println("Name: "+parents.get(Integer.parseInt(selectedParent)-1).getName());
+                        console.println("Phone number: "+parents.get(Integer.parseInt(selectedParent)-1).getPhoneNumber());
+                        String newPhoneNumber = console.getInput("Insert new phone number","","");
+
+                        parents.get(Integer.parseInt(selectedParent)-1).setPhoneNumber(newPhoneNumber);
+                        break phoneLoop;
+
+
+                      case "4": // go back
+                        break phoneLoop;
+                    }
+                  }
+                }
+              } else if(phoneMenuChoice.equals("2"))
+                break;
+
+
+
+
               break;
+
+
+
+
+
+
             case "3":
               // UC3 - Waiting List
               int index = 0;
