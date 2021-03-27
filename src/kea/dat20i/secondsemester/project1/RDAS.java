@@ -148,49 +148,70 @@ public class RDAS {
                   break;
                 index++;
               }
-              while(true) {
-                documents.get(index).display(20, 1); // display the document
-                String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
-                if(wLMenuChoice.equals("1")) { // add to list
-                  String inputName = console.getInput("Insert the parent's full name","","");
-                  String inputPhoneNumber = console.getInput("Insert the parent's phone number","","");
-                  String inputAddress = console.getInput("Insert the parent's address","","");
-                  String inputChildName = console.getInput("Insert the child's name","","");
-                  String inputChildAge = console.getInput("Insert the child's age","","");
-                  ArrayList<String> tmp = documents.get(index).getData();
-                  tmp.add(inputName);
-                  tmp.add(inputPhoneNumber);
-                  tmp.add(inputAddress);
-                  tmp.add(inputChildName);
-                  tmp.add(inputChildAge);
-                  documents.get(index).setData(tmp);
-                } else if(wLMenuChoice.equals("2")) { // remove from list
-                  if(documents.get(index).getData().size() > 0) {
-                    while (true) {
-                      String validInput = "[";
-                      for (int i = 0; i < documents.get(index).getData().size() / documents.get(index).getColumns().size(); i++) {
-                        validInput += i + 1;
-                      }
-                      validInput += "]{1}";
-                      String inputToRemove = console.getInput("Insert the row # to delete", validInput, "");
-                      if (inputToRemove.matches(validInput)) {
-                        ArrayList<String> tmp = documents.get(index).getData();
-                        for (int i = 0; i < documents.get(index).getColumns().size(); i++) {
-                          tmp.remove((Integer.parseInt(inputToRemove) - 1)*documents.get(index).getColumns().size());
-                        }
-                        documents.get(index).setData(tmp);
-                        break;
-                      }
-                    }
-                  } else
-                    console.println("No data to remove.");
-                } else if(wLMenuChoice.equals("3")) // go back
+              // check if employee has permission to view the document
+              Permission permission = Permission.NONE;
+              for(Group group: groups) {
+                permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                if(permission==Permission.EDITOR||permission==Permission.VIEWER)
                   break;
               }
+              if(permission==Permission.EDITOR||permission==Permission.VIEWER) {
+                while (true) {
+                  documents.get(index).display(20, 1); // display the document
+                  // check if employee has permission to edit the document
+                  for(Group group: groups) {
+                    permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                    if(permission==Permission.EDITOR)
+                      break;
+                  }
+                  if(permission==Permission.EDITOR) {
+                    String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
+                    if (wLMenuChoice.equals("1")) { // add to list
+                      String inputName = console.getInput("Insert the parent's full name", "", "");
+                      String inputPhoneNumber = console.getInput("Insert the parent's phone number", "", "");
+                      String inputAddress = console.getInput("Insert the parent's address", "", "");
+                      String inputChildName = console.getInput("Insert the child's name", "", "");
+                      String inputChildAge = console.getInput("Insert the child's age", "", "");
+                      ArrayList<String> tmp = documents.get(index).getData();
+                      tmp.add(inputName);
+                      tmp.add(inputPhoneNumber);
+                      tmp.add(inputAddress);
+                      tmp.add(inputChildName);
+                      tmp.add(inputChildAge);
+                      documents.get(index).setData(tmp);
+                    } else if (wLMenuChoice.equals("2")) { // remove from list
+                      if (documents.get(index).getData().size() > 0) {
+                        while (true) {
+                          String validInput = "[";
+                          for (int i = 0; i < documents.get(index).getData().size() / documents.get(index).getColumns().size(); i++) {
+                            validInput += i + 1;
+                          }
+                          validInput += "]{1}";
+                          String inputToRemove = console.getInput("Insert the row # to delete", validInput, "");
+                          if (inputToRemove.matches(validInput)) {
+                            ArrayList<String> tmp = documents.get(index).getData();
+                            for (int i = 0; i < documents.get(index).getColumns().size(); i++) {
+                              tmp.remove((Integer.parseInt(inputToRemove) - 1) * documents.get(index).getColumns().size());
+                            }
+                            documents.get(index).setData(tmp);
+                            break;
+                          }
+                        }
+                      } else
+                        console.println("No data to remove.");
+                    } else if (wLMenuChoice.equals("3")) // go back
+                      break;
+                  } else {
+                    console.println("You don't have permission to edit this document.");
+                    break;
+                  }
+                }
+              } else
+                console.println("You don't have permission to access this document.");
               break;
             case "4":
               // TODO: UC4 - Parents information
-
+              
               break;
             case "5":
               break menuLoop;

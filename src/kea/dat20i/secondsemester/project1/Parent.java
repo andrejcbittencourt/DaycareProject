@@ -6,7 +6,7 @@ public class Parent {
   private String name;
   private String phoneNumber;
   private String address;
-  ArrayList<Child> children = null;
+  private ArrayList<Child> children;
 
   Parent(String name, String phoneNumber, String address) {
     this.name = name;
