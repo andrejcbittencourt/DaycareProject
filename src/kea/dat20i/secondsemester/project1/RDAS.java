@@ -141,7 +141,7 @@ public class RDAS {
               // TODO: UC2 - Phone List
               break;
             case "3":
-              // TODO: UC3 - Waiting List
+              // UC3 - Waiting List
               int index = 0;
               for(Document document: documents) {
                 if(document.getName().equals("waitingList"))
@@ -152,28 +152,38 @@ public class RDAS {
                 documents.get(index).display(20, 1); // display the document
                 String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
                 if(wLMenuChoice.equals("1")) { // add to list
-                  while(true) {
-                    for (Parent parent : parents) { // display parent/child
-                      index = 0;
-                      for (String child : parent.getChildrenName()) {
-                        console.println(String.valueOf(index + 1) + ": parent: " + parent.getName() + " | child: " + child + " | age: " + parent.getChildAge(child));
-                        index++;
+                  String inputName = console.getInput("Insert the parent's full name","","");
+                  String inputPhoneNumber = console.getInput("Insert the parent's phone number","","");
+                  String inputAddress = console.getInput("Insert the parent's address","","");
+                  String inputChildName = console.getInput("Insert the child's name","","");
+                  String inputChildAge = console.getInput("Insert the child's age","","");
+                  ArrayList<String> tmp = documents.get(index).getData();
+                  tmp.add(inputName);
+                  tmp.add(inputPhoneNumber);
+                  tmp.add(inputAddress);
+                  tmp.add(inputChildName);
+                  tmp.add(inputChildAge);
+                  documents.get(index).setData(tmp);
+                } else if(wLMenuChoice.equals("2")) { // remove from list
+                  if(documents.get(index).getData().size() > 0) {
+                    while (true) {
+                      String validInput = "[";
+                      for (int i = 0; i < documents.get(index).getData().size() / documents.get(index).getColumns().size(); i++) {
+                        validInput += i + 1;
+                      }
+                      validInput += "]{1}";
+                      String inputToRemove = console.getInput("Insert the row # to delete", validInput, "");
+                      if (inputToRemove.matches(validInput)) {
+                        ArrayList<String> tmp = documents.get(index).getData();
+                        for (int i = 0; i < documents.get(index).getColumns().size(); i++) {
+                          tmp.remove((Integer.parseInt(inputToRemove) - 1)*documents.get(index).getColumns().size());
+                        }
+                        documents.get(index).setData(tmp);
+                        break;
                       }
                     }
-                    String validInput = "[";
-                    for (int i = 0; i < index; i++) {
-                      validInput += "" + (i + 1);
-                    }
-                    validInput += "]{1}";
-                    String childToAdd = console.getInput("Choose a parent/child to add to the list", validInput, "");
-                    if(!childToAdd.isEmpty()) { // if the input is valid
-                      // TODO: add the parent/child to the list
-                      break;
-                    }
-                  }
-                } else if(wLMenuChoice.equals("2")) { // remove from list
-                  // TODO: display and ask for parent/child to remove from the list
-
+                  } else
+                    console.println("No data to remove.");
                 } else if(wLMenuChoice.equals("3")) // go back
                   break;
               }
