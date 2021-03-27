@@ -291,7 +291,7 @@ public class RDAS {
                             parentsList.display(20, 1);
 
                             String selectedChild = console.getInput("Which child","","");
-
+                            
                             break parentsLoop;
                           case "4": // go back
                             break parentsLoop;
