@@ -406,25 +406,46 @@ public class RDAS {
                             parentsList.setData(parentsTmp);
                             parentsList.display(20, 1);
                             String childName = console.getInput("Insert name of the new child","","");
-                            String childAge = console.getInput("Insert the age of the new child","[1234567890]","");
+                            String childAge = console.getInput("Insert the age of the new child","[1234567890]+","");
                             if(!childAge.isEmpty())
                               parents.get(Integer.parseInt(selectedParent)-1).addChild(childName, Integer.parseInt(childAge));
                             else
                               console.println("Error adding new child.");
                             break parentsLoop;
                           case "3":
-                            // TODO: show and edit children
+                            // show and edit children
                             parentsTmp = new ArrayList<>();
                             parentsTmp.add("Name");
                             parentsTmp.add("Age");
                             parentsList = new Document("list", parentsTmp);
                             parentsTmp = new ArrayList<>();
+                            int childIndex = 0;
                             for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
                               parentsTmp.add(child);
                               parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                              childIndex++;
                             }
                             parentsList.setData(parentsTmp);
                             parentsList.display(20, 1);
+
+                            while(true) { // edit child
+                              String validChildInput = "[";
+                              for(int i=0; i < childIndex; i++) {
+                                validChildInput += i+1;
+                              }
+                              validChildInput += "]{1}";
+                              String selectedChild = console.getInput("Which child", validChildInput, "");
+                              if(!selectedChild.isEmpty()) { // valid choice
+                                String childOldName = parents.get(Integer.parseInt(selectedParent)-1).getChildrenName().get(Integer.parseInt(selectedChild)-1);
+                                console.println("Name: "+childOldName);
+                                String childNewName = console.getInput("Insert new name","","");
+                                console.println("Age: "+parents.get(Integer.parseInt(selectedParent)-1).getChildAge(childOldName));
+                                String childNewAge = console.getInput("Insert new age","[1234567890]+","");
+                                parents.get(Integer.parseInt(selectedParent)-1).setChildName(Integer.parseInt(selectedChild)-1, childNewName);
+                                parents.get(Integer.parseInt(selectedParent)-1).setChildAge(Integer.parseInt(selectedChild)-1, Integer.parseInt(childNewAge));
+                                break;
+                              }
+                            }
                             break parentsLoop;
                           case "4": // go back
                             break parentsLoop;
