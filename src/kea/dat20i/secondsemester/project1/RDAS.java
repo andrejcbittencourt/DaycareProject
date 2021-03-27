@@ -2,9 +2,7 @@ package kea.dat20i.secondsemester.project1;
 
 import kea.dat20i.libraries.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class RDAS {
 
