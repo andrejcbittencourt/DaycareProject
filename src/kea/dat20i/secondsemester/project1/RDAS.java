@@ -170,7 +170,7 @@ public class RDAS {
                     scheduleLoop:
                     while (true) {
                       String scheuleValidInput = "[";
-                      for (int i = 0; i < documents.size(); i++)
+                      for (int i = 0; i < documents.get(scheduleListIndex).getColumns().size(); i++)
                         scheuleValidInput += i + 1;
                       scheuleValidInput += "]{1}";
                       String selectedDay = console.getInput("Which column", scheuleValidInput, "");
