@@ -145,47 +145,69 @@ public class RDAS {
                 }
                 scheduleListIndex++;
               }
-              documents.get(scheduleListIndex).display(20,1);
+              // check if employee has permission to view the document
+              Permission wSPermission = Permission.NONE;
+              for(Group group: groups) {
+                wSPermission = group.getPermission(documents.get(scheduleListIndex).getName(),loginEmployee.getUsername());
+                if(wSPermission==Permission.EDITOR||wSPermission==Permission.VIEWER)
+                  break;
+              }
+              if(wSPermission==Permission.EDITOR||wSPermission==Permission.VIEWER) {
+                documents.get(scheduleListIndex).display(20, 1);
 
-              //option go back
-              //check permission
-              //option edit if editor
-              // select day and hour
-              String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
-              if(scheduleMenuChoice.equals("1")) {
-
-                scheduleLoop: while(true) {
-                  String scheuleValidInput = "[";
-                  for(int i = 0; i < documents.size(); i++)
-                    scheuleValidInput += i+1;
-                    scheuleValidInput += "]{1}";
-                  String selectedDay = console.getInput("Which column", scheuleValidInput,"");
-                  String selectedHour = console.getInput("Which row", scheuleValidInput,"");
-
-
-                  if(!selectedDay.isEmpty() & !selectedHour.isEmpty()) {
-                    scheduleMenuChoice = console.getInput("Choose an action;1- Edit;4- Go back", "[1234]{1}", "");
-                    switch (scheduleMenuChoice) {
-                      case "1":
-                        // edit schedule
-                        int selectedCell  = (Integer.parseInt(selectedHour)-1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay)-1);
-
-                        console.println("cell: "+documents.get(scheduleListIndex).getData().get(selectedCell));
-                        String newSchedule = console.getInput("Insert new activity","","");
-
-                        ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
-                        cellData.set(selectedCell,newSchedule);
-
-                        documents.get(scheduleListIndex).setData(cellData);
-                        break scheduleLoop;
-
-                      case "4": // go back
-                        break scheduleLoop;
-                    }
-                  }
+                // check if employee has permission to edit the document
+                for(Group group: groups) {
+                  wSPermission = group.getPermission(documents.get(scheduleListIndex).getName(),loginEmployee.getUsername());
+                  if(wSPermission==Permission.EDITOR)
+                    break;
                 }
-              } else if(scheduleMenuChoice.equals("2"))
-                break;
+                if(wSPermission==Permission.EDITOR) { // EDITOR
+                  //option go back
+                  //check permission
+                  //option edit if editor
+                  // select day and hour
+                  String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back", "[12]{1}", "");
+                  if (scheduleMenuChoice.equals("1")) {
+
+                    scheduleLoop:
+                    while (true) {
+                      String scheuleValidInput = "[";
+                      for (int i = 0; i < documents.size(); i++)
+                        scheuleValidInput += i + 1;
+                      scheuleValidInput += "]{1}";
+                      String selectedDay = console.getInput("Which column", scheuleValidInput, "");
+                      String selectedHour = console.getInput("Which row", scheuleValidInput, "");
+
+
+                      if (!selectedDay.isEmpty() & !selectedHour.isEmpty()) {
+                        scheduleMenuChoice = console.getInput("Choose an action;1- Edit;4- Go back", "[1234]{1}", "");
+                        switch (scheduleMenuChoice) {
+                          case "1":
+                            // edit schedule
+                            int selectedCell = (Integer.parseInt(selectedHour) - 1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay) - 1);
+
+                            console.println("cell: " + documents.get(scheduleListIndex).getData().get(selectedCell));
+                            String newSchedule = console.getInput("Insert new activity", "", "");
+
+                            ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
+                            cellData.set(selectedCell, newSchedule);
+
+                            documents.get(scheduleListIndex).setData(cellData);
+                            break scheduleLoop;
+
+                          case "4": // go back
+                            break scheduleLoop;
+                        }
+                      }
+                    }
+                  } else if (scheduleMenuChoice.equals("2"))
+                    break;
+                } else {
+                  console.println("You don't have permission to edit this document.");
+                  break;
+                }
+              } else
+                console.println("You don't have permission to access this document.");
               break;
 
             case "2":
@@ -196,7 +218,7 @@ public class RDAS {
               phoneTmp.add("Name");
               phoneTmp.add("Phone Number");
 
-              Document phoneList = new Document("list", phoneTmp);
+              Document phoneList = new Document("phoneList", phoneTmp);
               phoneTmp = new ArrayList<>();
               for(Parent parent: parents) {
                 phoneTmp.add(parent.getName());
@@ -204,38 +226,60 @@ public class RDAS {
 
               }
               phoneList.setData(phoneTmp);
-              phoneList.display(20, 1);
 
-              // select number
-              String phoneMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
-              if(phoneMenuChoice.equals("1")) {
-                phoneLoop: while(true) {
-                  String phoneValidInput = "[";
-                  for(int i = 0; i < parents.size(); i++)
-                    phoneValidInput += i+1;
-                  phoneValidInput += "]{1}";
-                  String selectedParent = console.getInput("Which parent", phoneValidInput,"");
+              // check if employee has permission to view the document
+              Permission pLPermission = Permission.NONE;
+              for(Group group: groups) {
+                pLPermission = group.getPermission(phoneList.getName(),loginEmployee.getUsername());
+                if(pLPermission==Permission.EDITOR||pLPermission==Permission.VIEWER)
+                  break;
+              }
+              if(pLPermission==Permission.EDITOR||pLPermission==Permission.VIEWER) {
+                phoneList.display(20, 1);
 
-                  if(!selectedParent.isEmpty()) {
-                    phoneMenuChoice = console.getInput("Choose an action;1- Edit this number;4- Go back", "[1234]{1}", "");
-                    switch (phoneMenuChoice) {
-                      case "1":
-                        // edit phone number
-                        console.println("Name: "+parents.get(Integer.parseInt(selectedParent)-1).getName());
-                        console.println("Phone number: "+parents.get(Integer.parseInt(selectedParent)-1).getPhoneNumber());
-                        String newPhoneNumber = console.getInput("Insert new phone number","","");
-
-                        parents.get(Integer.parseInt(selectedParent)-1).setPhoneNumber(newPhoneNumber);
-                        break phoneLoop;
-
-
-                      case "4": // go back
-                        break phoneLoop;
-                    }
-                  }
+                // check if employee has permission to edit the document
+                for(Group group: groups) {
+                  pLPermission = group.getPermission(phoneList.getName(),loginEmployee.getUsername());
+                  if(pLPermission==Permission.EDITOR)
+                    break;
                 }
-              } else if(phoneMenuChoice.equals("2"))
-                break;
+                if(pLPermission==Permission.EDITOR) { // EDITOR
+                  // select number
+                  String phoneMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back", "[12]{1}", "");
+                  if (phoneMenuChoice.equals("1")) {
+                    phoneLoop:
+                    while (true) {
+                      String phoneValidInput = "[";
+                      for (int i = 0; i < parents.size(); i++)
+                        phoneValidInput += i + 1;
+                      phoneValidInput += "]{1}";
+                      String selectedParent = console.getInput("Which parent", phoneValidInput, "");
+
+                      if (!selectedParent.isEmpty()) {
+                        phoneMenuChoice = console.getInput("Choose an action;1- Edit this number;4- Go back", "[1234]{1}", "");
+                        switch (phoneMenuChoice) {
+                          case "1":
+                            // edit phone number
+                            console.println("Name: " + parents.get(Integer.parseInt(selectedParent) - 1).getName());
+                            console.println("Phone number: " + parents.get(Integer.parseInt(selectedParent) - 1).getPhoneNumber());
+                            String newPhoneNumber = console.getInput("Insert new phone number", "", "");
+
+                            parents.get(Integer.parseInt(selectedParent) - 1).setPhoneNumber(newPhoneNumber);
+                            break phoneLoop;
+
+                          case "4": // go back
+                            break phoneLoop;
+                        }
+                      }
+                    }
+                  } else if (phoneMenuChoice.equals("2"))
+                    break;
+                } else {
+                  console.println("You don't have permission to edit this document.");
+                  break;
+                }
+              } else
+                console.println("You don't have permission to access this document.");
               break;
 
             case "3":
@@ -247,22 +291,22 @@ public class RDAS {
                 index++;
               }
               // check if employee has permission to view the document
-              Permission permission = Permission.NONE;
+              Permission wLPermission = Permission.NONE;
               for(Group group: groups) {
-                permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
-                if(permission==Permission.EDITOR||permission==Permission.VIEWER)
+                wLPermission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                if(wLPermission==Permission.EDITOR||wLPermission==Permission.VIEWER)
                   break;
               }
-              if(permission==Permission.EDITOR||permission==Permission.VIEWER) { // VIEWER or EDITOR
+              if(wLPermission==Permission.EDITOR||wLPermission==Permission.VIEWER) { // VIEWER or EDITOR
                 while (true) {
                   documents.get(index).display(20, 1); // display the document
                   // check if employee has permission to edit the document
                   for(Group group: groups) {
-                    permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
-                    if(permission==Permission.EDITOR)
+                    wLPermission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                    if(wLPermission==Permission.EDITOR)
                       break;
                   }
-                  if(permission==Permission.EDITOR) { // EDITOR
+                  if(wLPermission==Permission.EDITOR) { // EDITOR
                     String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
                     if (wLMenuChoice.equals("1")) { // add to list
                       String inputName = console.getInput("Insert the parent's full name", "", "");
