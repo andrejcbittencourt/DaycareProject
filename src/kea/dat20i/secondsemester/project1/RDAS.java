@@ -283,15 +283,33 @@ public class RDAS {
                             parentsTmp.add("Age");
                             parentsList = new Document("list", parentsTmp);
                             parentsTmp = new ArrayList<>();
+                            int childIndex = 0;
                             for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
                               parentsTmp.add(child);
                               parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                              childIndex++;
                             }
                             parentsList.setData(parentsTmp);
                             parentsList.display(20, 1);
 
-                            String selectedChild = console.getInput("Which child","","");
-                            
+                            while(true) { // edit child
+                              String validChildInput = "[";
+                              for(int i=0; i < childIndex; i++) {
+                                validChildInput += i+1;
+                              }
+                              validChildInput += "]{1}";
+                              String selectedChild = console.getInput("Which child", validChildInput, "");
+                              if(!selectedChild.isEmpty()) { // valid choice
+                                String childOldName = parents.get(Integer.parseInt(selectedParent)-1).getChildrenName().get(Integer.parseInt(selectedChild)-1);
+                                console.println("Name: "+childOldName);
+                                String childNewName = console.getInput("Insert new name","","");
+                                console.println("Age: "+parents.get(Integer.parseInt(selectedParent)-1).getChildAge(childOldName));
+                                String childNewAge = console.getInput("Insert new age","[1234567890]+","");
+                                parents.get(Integer.parseInt(selectedParent)-1).setChildName(Integer.parseInt(selectedChild)-1, childNewName);
+                                parents.get(Integer.parseInt(selectedParent)-1).setChildAge(Integer.parseInt(selectedChild)-1, Integer.parseInt(childNewAge));
+                                break;
+                              }
+                            }
                             break parentsLoop;
                           case "4": // go back
                             break parentsLoop;
