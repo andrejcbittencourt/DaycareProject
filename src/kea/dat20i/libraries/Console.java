@@ -20,7 +20,7 @@ public class Console {
     print(menu.toString());
     String input = "";
     try {
-      input = scan.next();
+      input = scan.nextLine();
       // validate the regex if not empty
       if(!validInput.isEmpty()&&!input.matches(validInput))
         throw new InputMismatchException();
@@ -28,7 +28,7 @@ public class Console {
       //this.clear();
       //this.cursorPosition(0,0);
       println("Error: "+((errorMessage.isEmpty())?"Invalid input.":errorMessage));
-      scan.nextLine();
+      //scan.nextLine();
       input = "";
     }
     return input;

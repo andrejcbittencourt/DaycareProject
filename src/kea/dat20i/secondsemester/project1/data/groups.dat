@@ -1,5 +1,5 @@
 admin
-workSchedule;EDITOR;phoneList;EDITOR
+workSchedule;EDITOR;phoneList;EDITOR;waitingList;EDITOR
 andre
 employee
 workSchedule;VIEWER;phoneList;VIEWER

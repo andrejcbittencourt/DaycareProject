@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Group {
   private String name;
-  ArrayList<AccessControl> accessControlList;
-  ArrayList<String> employees;
+  private ArrayList<AccessControl> accessControlList;
+  private ArrayList<String> employees;
 
   Group(String name) {
     this.name = name;
@@ -18,15 +18,18 @@ public class Group {
   public void addAccessControl(String document, Permission permission) {
     this.accessControlList.add(new AccessControl(document, permission));
   }
-  public Permission getPermission(String document) {
-    for(AccessControl accessControl: accessControlList) {
+  public Permission getPermission(String document, String employeeUsername) {
+    for(AccessControl accessControl: this.accessControlList) {
       if(accessControl.getDocument().equals(document))
-        return accessControl.getPermission();
+        for(String employee: this.employees) {
+          if(employee.equals(employeeUsername))
+            return accessControl.getPermission();
+        }
     }
     return Permission.NONE;
   }
   public Boolean isInGroup(String employeeUsername) {
-    for(String employee: employees) {
+    for(String employee: this.employees) {
       if(employee.equals(employeeUsername))
         return true;
     }

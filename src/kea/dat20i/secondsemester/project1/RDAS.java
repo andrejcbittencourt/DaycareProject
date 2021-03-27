@@ -82,18 +82,16 @@ public class RDAS {
       while(buffer.hasNext()) {
         String docName = buffer.nextLine();
         // columns
-        if(buffer.hasNextLine()) {
-          Scanner subBuffer = new Scanner(buffer.nextLine());
-          subBuffer.useDelimiter(";");
-          ArrayList<String> docColumns = new ArrayList<>();
-          while (subBuffer.hasNext()) {
-            docColumns.add(subBuffer.next());
-          }
-          documents.add(new Document(docName, docColumns));
+        Scanner subBuffer = new Scanner(buffer.nextLine());
+        subBuffer.useDelimiter(";");
+        ArrayList<String> docColumns = new ArrayList<>();
+        while (subBuffer.hasNext()) {
+          docColumns.add(subBuffer.next());
         }
+        documents.add(new Document(docName, docColumns));
         // data
         if(buffer.hasNextLine()) {
-          Scanner subBuffer = new Scanner(buffer.nextLine());
+          subBuffer = new Scanner(buffer.nextLine());
           subBuffer.useDelimiter(";");
           ArrayList<String> docData = new ArrayList<>();
           while (subBuffer.hasNext()) {
@@ -117,10 +115,10 @@ public class RDAS {
       console.println(name);
 
       // login input
-      String inputUsername = console.getInput("Please Login;username", "", "");
+      String inputUsername = console.getInput("Please Login;Username", "", "");
       if(inputUsername.equals("exit;")) // if "exit;" then quit
         break;
-      String inputPassword = console.getInput("password", "", "");
+      String inputPassword = console.getInput("Password", "", "");
 
       // authenticate
       Employee loginEmployee = null;
@@ -134,24 +132,177 @@ public class RDAS {
       if(loginEmployee != null) { // if login was successful
         menuLoop: while(true) {
           // menu
-          String menuOptions = "Menu:;1- Work Schedule;2- Telephone List;3- Parents Information;4- Waiting List;5- Log out";
+          String menuOptions = "Menu:;1- Work Schedule;2- Telephone List;3- Waiting List;4- Parents Information;5- Log out";
           String validMenuInput = "[12345]{1}";
           String menuChoice = console.getInput(menuOptions, validMenuInput, "");
-          switch (Integer.parseInt(menuChoice)) {
-            case 1:
-              // TODO: UC1
+          switch (menuChoice) {
+            case "1":
+              // TODO: UC1 - Work Schedule
               break;
-            case 2:
-              // TODO: UC2
+            case "2":
+              // TODO: UC2 - Phone List
               break;
-            case 3:
-              // TODO: UC3
+            case "3":
+              // UC3 - Waiting List
+              int index = 0;
+              for(Document document: documents) {
+                if(document.getName().equals("waitingList"))
+                  break;
+                index++;
+              }
+              // check if employee has permission to view the document
+              Permission permission = Permission.NONE;
+              for(Group group: groups) {
+                permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                if(permission==Permission.EDITOR||permission==Permission.VIEWER)
+                  break;
+              }
+              if(permission==Permission.EDITOR||permission==Permission.VIEWER) { // VIEWER or EDITOR
+                while (true) {
+                  documents.get(index).display(20, 1); // display the document
+                  // check if employee has permission to edit the document
+                  for(Group group: groups) {
+                    permission = group.getPermission(documents.get(index).getName(),loginEmployee.getUsername());
+                    if(permission==Permission.EDITOR)
+                      break;
+                  }
+                  if(permission==Permission.EDITOR) { // EDITOR
+                    String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
+                    if (wLMenuChoice.equals("1")) { // add to list
+                      String inputName = console.getInput("Insert the parent's full name", "", "");
+                      String inputPhoneNumber = console.getInput("Insert the parent's phone number", "", "");
+                      String inputAddress = console.getInput("Insert the parent's address", "", "");
+                      String inputChildName = console.getInput("Insert the child's name", "", "");
+                      String inputChildAge = console.getInput("Insert the child's age", "", "");
+                      ArrayList<String> tmp = documents.get(index).getData();
+                      tmp.add(inputName);
+                      tmp.add(inputPhoneNumber);
+                      tmp.add(inputAddress);
+                      tmp.add(inputChildName);
+                      tmp.add(inputChildAge);
+                      documents.get(index).setData(tmp);
+                    } else if (wLMenuChoice.equals("2")) { // remove from list
+                      if (documents.get(index).getData().size() > 0) {
+                        while (true) {
+                          String validInput = "[";
+                          for (int i = 0; i < documents.get(index).getData().size() / documents.get(index).getColumns().size(); i++) {
+                            validInput += i + 1;
+                          }
+                          validInput += "]{1}";
+                          String inputToRemove = console.getInput("Insert the row # to delete", validInput, "");
+                          if (!inputToRemove.isEmpty()) {
+                            ArrayList<String> tmp = documents.get(index).getData();
+                            for (int i = 0; i < documents.get(index).getColumns().size(); i++) {
+                              tmp.remove((Integer.parseInt(inputToRemove) - 1) * documents.get(index).getColumns().size());
+                            }
+                            documents.get(index).setData(tmp);
+                            break;
+                          }
+                        }
+                      } else
+                        console.println("No data to remove.");
+                    } else if (wLMenuChoice.equals("3")) // go back
+                      break;
+                  } else {
+                    console.println("You don't have permission to edit this document.");
+                    break;
+                  }
+                }
+              } else
+                console.println("You don't have permission to access this document.");
               break;
-            case 4:
-              // TODO: UC4
+            case "4":
+              // UC4 - parents information
+              if(loginEmployee.is_admin()) { // only admin
+                while(true) {
+                  // show parents list
+                  ArrayList<String> parentsTmp = new ArrayList<>();
+                  parentsTmp.add("Name");
+                  parentsTmp.add("Phone Number");
+                  parentsTmp.add("Address");
+                  parentsTmp.add("# of children");
+                  Document parentsList = new Document("list", parentsTmp);
+                  parentsTmp = new ArrayList<>();
+                  for(Parent parent: parents) {
+                    parentsTmp.add(parent.getName());
+                    parentsTmp.add(parent.getPhoneNumber());
+                    parentsTmp.add(parent.getAddress());
+                    ArrayList<String> nChildren = parent.getChildrenName();
+                    parentsTmp.add(String.valueOf(nChildren.size()));
+                  }
+                  parentsList.setData(parentsTmp);
+                  parentsList.display(20, 1);
+                  // select parent
+                  String pMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
+                  if(pMenuChoice.equals("1")) {
+                    parentsLoop: while(true) {
+                      String parentsValidInput = "[";
+                      for(int i = 0; i < parents.size(); i++)
+                        parentsValidInput += i+1;
+                      parentsValidInput += "]{1}";
+                      String selectedParent = console.getInput("Which parent", parentsValidInput,"");
+                      if(!selectedParent.isEmpty()) {
+                        pMenuChoice = console.getInput("Choose an action;1- Edit parent;2- Add child;3- Edit child;4- Go back", "[1234]{1}", "");
+                        switch (pMenuChoice) {
+                          case "1":
+                            // edit parent info
+                            console.println("Name: "+parents.get(Integer.parseInt(selectedParent)-1).getName());
+                            String newName = console.getInput("Insert new name","","");
+                            console.println("Phone number: "+parents.get(Integer.parseInt(selectedParent)-1).getPhoneNumber());
+                            String newPhoneNumber = console.getInput("Insert new phone number","","");
+                            console.println("Address: "+parents.get(Integer.parseInt(selectedParent)-1).getAddress());
+                            String newAddress = console.getInput("Insert new address","","");
+                            parents.get(Integer.parseInt(selectedParent)-1).setName(newName);
+                            parents.get(Integer.parseInt(selectedParent)-1).setPhoneNumber(newPhoneNumber);
+                            parents.get(Integer.parseInt(selectedParent)-1).setAddress(newAddress);
+                            break parentsLoop;
+                          case "2":
+                            // show children and add a new one
+                            parentsTmp = new ArrayList<>();
+                            parentsTmp.add("Name");
+                            parentsTmp.add("Age");
+                            parentsList = new Document("list", parentsTmp);
+                            parentsTmp = new ArrayList<>();
+                            for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
+                              parentsTmp.add(child);
+                              parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                            }
+                            parentsList.setData(parentsTmp);
+                            parentsList.display(20, 1);
+                            String childName = console.getInput("Insert name of the new child","","");
+                            String childAge = console.getInput("Insert the age of the new child","[1234567890]","");
+                            if(!childAge.isEmpty())
+                              parents.get(Integer.parseInt(selectedParent)-1).addChild(childName, Integer.parseInt(childAge));
+                            else
+                              console.println("Error adding new child.");
+                            break parentsLoop;
+                          case "3":
+                            // TODO: show and edit children
+                            parentsTmp = new ArrayList<>();
+                            parentsTmp.add("Name");
+                            parentsTmp.add("Age");
+                            parentsList = new Document("list", parentsTmp);
+                            parentsTmp = new ArrayList<>();
+                            for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
+                              parentsTmp.add(child);
+                              parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                            }
+                            parentsList.setData(parentsTmp);
+                            parentsList.display(20, 1);
+                            break parentsLoop;
+                          case "4": // go back
+                            break parentsLoop;
+                        }
+                      }
+                    }
+                  } else if(pMenuChoice.equals("2"))
+                    break;
+                }
+              } else
+                console.println("Access denied: not admin.");
               break;
-            case 5:
-              break menuLoop;
+            case "5":
+              break menuLoop; // log out
           }
         }
         // Store all the data back
