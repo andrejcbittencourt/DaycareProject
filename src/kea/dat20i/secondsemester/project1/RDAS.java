@@ -2,7 +2,9 @@ package kea.dat20i.secondsemester.project1;
 
 import kea.dat20i.libraries.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class RDAS {
 
@@ -219,7 +221,7 @@ public class RDAS {
                   parentsTmp.add("Phone Number");
                   parentsTmp.add("Address");
                   parentsTmp.add("# of children");
-                  Document parentsList = new Document("parentsList", parentsTmp);
+                  Document parentsList = new Document("list", parentsTmp);
                   parentsTmp = new ArrayList<>();
                   for(Parent parent: parents) {
                     parentsTmp.add(parent.getName());
@@ -231,22 +233,38 @@ public class RDAS {
                   parentsList.setData(parentsTmp);
                   parentsList.display(20, 1);
                   // select parent
-                  String pMenuChoice = console.getInput("Choose an action;1- Select parent;2- Go back","[12]{1}","");
+                  String pMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
                   if(pMenuChoice.equals("1")) {
                     parentsLoop: while(true) {
-                      pMenuChoice = console.getInput("Choose an action;1- Edit;2- Add child;3- Edit child;4- Go back", "[1234]{1}", "");
-                      switch (pMenuChoice) {
-                        case "1":
-                          // TODO: edit parent info
-                          break;
-                        case "2":
-                          // TODO: add and show children
-                          break;
-                        case "3":
-                          // TODO: show and edit children
-                          break;
-                        case "4": // go back
-                          break parentsLoop;
+                      String parentsValidInput = "[";
+                      for(int i = 0; i < parents.size(); i++)
+                        parentsValidInput += i+1;
+                      parentsValidInput += "]{1}";
+                      String selectedParent = console.getInput("Which parent", parentsValidInput,"");
+                      if(selectedParent.matches(parentsValidInput)) {
+                        pMenuChoice = console.getInput("Choose an action;1- Edit parent;2- Add child;3- Edit child;4- Go back", "[1234]{1}", "");
+                        switch (pMenuChoice) {
+                          case "1":
+                            // edit parent info
+                            console.println("Name: "+parents.get(Integer.parseInt(selectedParent)-1).getName());
+                            String newName = console.getInput("Insert new name","","");
+                            console.println("Phone number: "+parents.get(Integer.parseInt(selectedParent)-1).getPhoneNumber());
+                            String newPhoneNumber = console.getInput("Insert new phone number","","");
+                            console.println("Address: "+parents.get(Integer.parseInt(selectedParent)-1).getAddress());
+                            String newAddress = console.getInput("Insert new address","","");
+                            parents.get(Integer.parseInt(selectedParent)-1).setName(newName);
+                            parents.get(Integer.parseInt(selectedParent)-1).setPhoneNumber(newPhoneNumber);
+                            parents.get(Integer.parseInt(selectedParent)-1).setAddress(newAddress);
+                            break parentsLoop;
+                          case "2":
+                            // TODO: add and show children
+                            break;
+                          case "3":
+                            // TODO: show and edit children
+                            break;
+                          case "4": // go back
+                            break parentsLoop;
+                        }
                       }
                     }
                   } else if(pMenuChoice.equals("2"))
