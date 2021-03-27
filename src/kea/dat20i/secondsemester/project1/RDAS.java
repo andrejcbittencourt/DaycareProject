@@ -188,7 +188,7 @@ public class RDAS {
                           }
                           validInput += "]{1}";
                           String inputToRemove = console.getInput("Insert the row # to delete", validInput, "");
-                          if (inputToRemove.matches(validInput)) {
+                          if (!inputToRemove.isEmpty()) {
                             ArrayList<String> tmp = documents.get(index).getData();
                             for (int i = 0; i < documents.get(index).getColumns().size(); i++) {
                               tmp.remove((Integer.parseInt(inputToRemove) - 1) * documents.get(index).getColumns().size());
@@ -239,7 +239,7 @@ public class RDAS {
                         parentsValidInput += i+1;
                       parentsValidInput += "]{1}";
                       String selectedParent = console.getInput("Which parent", parentsValidInput,"");
-                      if(selectedParent.matches(parentsValidInput)) {
+                      if(!selectedParent.isEmpty()) {
                         pMenuChoice = console.getInput("Choose an action;1- Edit parent;2- Add child;3- Edit child;4- Go back", "[1234]{1}", "");
                         switch (pMenuChoice) {
                           case "1":
@@ -255,11 +255,39 @@ public class RDAS {
                             parents.get(Integer.parseInt(selectedParent)-1).setAddress(newAddress);
                             break parentsLoop;
                           case "2":
-                            // TODO: add and show children
-                            break;
+                            // show children and add a new one
+                            parentsTmp = new ArrayList<>();
+                            parentsTmp.add("Name");
+                            parentsTmp.add("Age");
+                            parentsList = new Document("list", parentsTmp);
+                            parentsTmp = new ArrayList<>();
+                            for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
+                              parentsTmp.add(child);
+                              parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                            }
+                            parentsList.setData(parentsTmp);
+                            parentsList.display(20, 1);
+                            String childName = console.getInput("Insert name of the new child","","");
+                            String childAge = console.getInput("Insert the age of the new child","[1234567890]","");
+                            if(!childAge.isEmpty())
+                              parents.get(Integer.parseInt(selectedParent)-1).addChild(childName, Integer.parseInt(childAge));
+                            else
+                              console.println("Error adding new child.");
+                            break parentsLoop;
                           case "3":
                             // TODO: show and edit children
-                            break;
+                            parentsTmp = new ArrayList<>();
+                            parentsTmp.add("Name");
+                            parentsTmp.add("Age");
+                            parentsList = new Document("list", parentsTmp);
+                            parentsTmp = new ArrayList<>();
+                            for(String child: parents.get(Integer.parseInt(selectedParent)-1).getChildrenName()) {
+                              parentsTmp.add(child);
+                              parentsTmp.add(String.valueOf(parents.get(Integer.parseInt(selectedParent)-1).getChildAge(child)));
+                            }
+                            parentsList.setData(parentsTmp);
+                            parentsList.display(20, 1);
+                            break parentsLoop;
                           case "4": // go back
                             break parentsLoop;
                         }
