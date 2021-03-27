@@ -167,36 +167,46 @@ public class RDAS {
                   String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back", "[12]{1}", "");
                   if (scheduleMenuChoice.equals("1")) {
 
-                    scheduleLoop:
-                    while (true) {
-                      String scheuleValidInput = "[";
-                      for (int i = 0; i < documents.get(scheduleListIndex).getColumns().size(); i++)
-                        scheuleValidInput += i + 1;
-                      scheuleValidInput += "]{1}";
-                      String selectedDay = console.getInput("Which column", scheuleValidInput, "");
-                      String selectedHour = console.getInput("Which row", scheuleValidInput, "");
+                    scheduleLoop: while (true) {
+                    String selectedHour = "";
+                    String selectedDay = "";
+                      while(true) {
+                        String scheuleValidInput = "[";
+                        for (int i = 0; i < documents.get(scheduleListIndex).getColumns().size(); i++)
+                          scheuleValidInput += i + 1;
+                        scheuleValidInput += "]{1}";
+                        selectedDay = console.getInput("Which column", scheuleValidInput, "");
+                        if(!selectedDay.isEmpty())
+                          break;
+                      }
+                      while(true) {
+                        String scheuleValidInput = "[";
+                        for (int i = 0; i < (documents.get(scheduleListIndex).getData().size() / documents.get(scheduleListIndex).getColumns().size()); i++)
+                          scheuleValidInput += i + 1;
+                        scheuleValidInput += "]{1}";
+                        selectedHour = console.getInput("Which row", scheuleValidInput, "");
+                        if(!selectedHour.isEmpty())
+                          break;
+                      }
 
+                      int selectedCell = (Integer.parseInt(selectedHour) - 1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay) - 1);
+                      console.println("cell: " + documents.get(scheduleListIndex).getData().get(selectedCell));
 
-                      if (!selectedDay.isEmpty() & !selectedHour.isEmpty()) {
-                        int selectedCell = (Integer.parseInt(selectedHour) - 1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay) - 1);
-                        console.println("cell: " + documents.get(scheduleListIndex).getData().get(selectedCell));
+                      scheduleMenuChoice = console.getInput("Choose an action;1- Confirm;2- Go back", "[1234]{1}", "");
+                      switch (scheduleMenuChoice) {
+                        case "1":
+                          // edit schedule
 
-                        scheduleMenuChoice = console.getInput("Choose an action;1- Confirm;2- Go back", "[1234]{1}", "");
-                        switch (scheduleMenuChoice) {
-                          case "1":
-                            // edit schedule
+                          String newSchedule = console.getInput("Insert new activity", "", "");
 
-                            String newSchedule = console.getInput("Insert new activity", "", "");
+                          ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
+                          cellData.set(selectedCell, newSchedule);
 
-                            ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
-                            cellData.set(selectedCell, newSchedule);
+                          documents.get(scheduleListIndex).setData(cellData);
+                          break scheduleLoop;
 
-                            documents.get(scheduleListIndex).setData(cellData);
-                            break scheduleLoop;
-
-                          case "2": // go back
-                            break scheduleLoop;
-                        }
+                        case "2": // go back
+                          break scheduleLoop;
                       }
                     }
                   } else if (scheduleMenuChoice.equals("2"))
