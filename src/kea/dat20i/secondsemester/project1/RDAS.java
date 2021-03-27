@@ -268,14 +268,14 @@ public class RDAS {
                             parentsList.setData(parentsTmp);
                             parentsList.display(20, 1);
                             String childName = console.getInput("Insert name of the new child","","");
-                            String childAge = console.getInput("Insert the age of the new child","[1234567890]","");
+                            String childAge = console.getInput("Insert the age of the new child","[1234567890]+","");
                             if(!childAge.isEmpty())
                               parents.get(Integer.parseInt(selectedParent)-1).addChild(childName, Integer.parseInt(childAge));
                             else
                               console.println("Error adding new child.");
                             break parentsLoop;
                           case "3":
-                            // TODO: show and edit children
+                            // show and edit children
                             parentsTmp = new ArrayList<>();
                             parentsTmp.add("Name");
                             parentsTmp.add("Age");
@@ -287,6 +287,9 @@ public class RDAS {
                             }
                             parentsList.setData(parentsTmp);
                             parentsList.display(20, 1);
+
+                            String selectedChild = console.getInput("Which child","","");
+
                             break parentsLoop;
                           case "4": // go back
                             break parentsLoop;

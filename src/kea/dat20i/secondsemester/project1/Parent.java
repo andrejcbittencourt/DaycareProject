@@ -43,6 +43,14 @@ public class Parent {
     children.add(new Child(name, age));
   }
 
+  public void setChildName(int index, String name) {
+    this.children.get(index).setName(name);
+  }
+
+  public void setChildAge(int index, int age) {
+    this.children.get(index).setAge(age);
+  }
+
   public ArrayList<String> getChildrenName() {
     ArrayList<String> result = new ArrayList<>();
     for(Child child: children) {
