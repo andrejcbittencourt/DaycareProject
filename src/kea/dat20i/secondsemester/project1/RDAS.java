@@ -113,10 +113,10 @@ public class RDAS {
       console.println(name);
 
       // login input
-      String inputUsername = console.getInput("Please Login;username", "", "");
+      String inputUsername = console.getInput("Please Login;Username", "", "");
       if(inputUsername.equals("exit;")) // if "exit;" then quit
         break;
-      String inputPassword = console.getInput("password", "", "");
+      String inputPassword = console.getInput("Password", "", "");
 
       // authenticate
       Employee loginEmployee = null;
@@ -155,7 +155,7 @@ public class RDAS {
                 if(permission==Permission.EDITOR||permission==Permission.VIEWER)
                   break;
               }
-              if(permission==Permission.EDITOR||permission==Permission.VIEWER) {
+              if(permission==Permission.EDITOR||permission==Permission.VIEWER) { // VIEWER or EDITOR
                 while (true) {
                   documents.get(index).display(20, 1); // display the document
                   // check if employee has permission to edit the document
@@ -164,7 +164,7 @@ public class RDAS {
                     if(permission==Permission.EDITOR)
                       break;
                   }
-                  if(permission==Permission.EDITOR) {
+                  if(permission==Permission.EDITOR) { // EDITOR
                     String wLMenuChoice = console.getInput("Choose an action;1- Add;2- Remove;3- Go Back", "[123]{1}", "");
                     if (wLMenuChoice.equals("1")) { // add to list
                       String inputName = console.getInput("Insert the parent's full name", "", "");
@@ -210,11 +210,53 @@ public class RDAS {
                 console.println("You don't have permission to access this document.");
               break;
             case "4":
-              // TODO: UC4 - Parents information
-              
+              // UC4 - parents information
+              if(loginEmployee.is_admin()) { // only admin
+                while(true) {
+                  // show parents list
+                  ArrayList<String> parentsTmp = new ArrayList<>();
+                  parentsTmp.add("Name");
+                  parentsTmp.add("Phone Number");
+                  parentsTmp.add("Address");
+                  parentsTmp.add("# of children");
+                  Document parentsList = new Document("parentsList", parentsTmp);
+                  parentsTmp = new ArrayList<>();
+                  for(Parent parent: parents) {
+                    parentsTmp.add(parent.getName());
+                    parentsTmp.add(parent.getPhoneNumber());
+                    parentsTmp.add(parent.getAddress());
+                    ArrayList<String> nChildren = parent.getChildrenName();
+                    parentsTmp.add(String.valueOf(nChildren.size()));
+                  }
+                  parentsList.setData(parentsTmp);
+                  parentsList.display(20, 1);
+                  // select parent
+                  String pMenuChoice = console.getInput("Choose an action;1- Select parent;2- Go back","[12]{1}","");
+                  if(pMenuChoice.equals("1")) {
+                    parentsLoop: while(true) {
+                      pMenuChoice = console.getInput("Choose an action;1- Edit;2- Add child;3- Edit child;4- Go back", "[1234]{1}", "");
+                      switch (pMenuChoice) {
+                        case "1":
+                          // TODO: edit parent info
+                          break;
+                        case "2":
+                          // TODO: add and show children
+                          break;
+                        case "3":
+                          // TODO: show and edit children
+                          break;
+                        case "4": // go back
+                          break parentsLoop;
+                      }
+                    }
+                  } else if(pMenuChoice.equals("2"))
+                    break;
+                }
+              } else
+                console.println("Access denied: not admin.");
               break;
             case "5":
-              break menuLoop;
+              break menuLoop; // log out
           }
         }
         // Store all the data back
