@@ -162,9 +162,7 @@ public class RDAS {
                     break;
                 }
                 if(wSPermission==Permission.EDITOR) { // EDITOR
-                  //option go back
-                  //check permission
-                  //option edit if editor
+
                   // select day and hour
                   String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back", "[12]{1}", "");
                   if (scheduleMenuChoice.equals("1")) {
@@ -180,13 +178,14 @@ public class RDAS {
 
 
                       if (!selectedDay.isEmpty() & !selectedHour.isEmpty()) {
-                        scheduleMenuChoice = console.getInput("Choose an action;1- Edit;4- Go back", "[1234]{1}", "");
+                        int selectedCell = (Integer.parseInt(selectedHour) - 1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay) - 1);
+                        console.println("cell: " + documents.get(scheduleListIndex).getData().get(selectedCell));
+
+                        scheduleMenuChoice = console.getInput("Choose an action;1- Confirm;2- Go back", "[1234]{1}", "");
                         switch (scheduleMenuChoice) {
                           case "1":
                             // edit schedule
-                            int selectedCell = (Integer.parseInt(selectedHour) - 1) * documents.get(scheduleListIndex).getColumns().size() + (Integer.parseInt(selectedDay) - 1);
 
-                            console.println("cell: " + documents.get(scheduleListIndex).getData().get(selectedCell));
                             String newSchedule = console.getInput("Insert new activity", "", "");
 
                             ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
@@ -195,7 +194,7 @@ public class RDAS {
                             documents.get(scheduleListIndex).setData(cellData);
                             break scheduleLoop;
 
-                          case "4": // go back
+                          case "2": // go back
                             break scheduleLoop;
                         }
                       }
@@ -254,20 +253,19 @@ public class RDAS {
                         phoneValidInput += i + 1;
                       phoneValidInput += "]{1}";
                       String selectedParent = console.getInput("Which parent", phoneValidInput, "");
+                      console.println("Phone number: " + parents.get(Integer.parseInt(selectedParent) - 1).getPhoneNumber());
 
                       if (!selectedParent.isEmpty()) {
-                        phoneMenuChoice = console.getInput("Choose an action;1- Edit this number;4- Go back", "[1234]{1}", "");
+                        phoneMenuChoice = console.getInput("Choose an action;1- Confirm;2- Go back", "[1234]{1}", "");
                         switch (phoneMenuChoice) {
                           case "1":
                             // edit phone number
-                            console.println("Name: " + parents.get(Integer.parseInt(selectedParent) - 1).getName());
-                            console.println("Phone number: " + parents.get(Integer.parseInt(selectedParent) - 1).getPhoneNumber());
                             String newPhoneNumber = console.getInput("Insert new phone number", "", "");
 
                             parents.get(Integer.parseInt(selectedParent) - 1).setPhoneNumber(newPhoneNumber);
                             break phoneLoop;
 
-                          case "4": // go back
+                          case "2": // go back
                             break phoneLoop;
                         }
                       }

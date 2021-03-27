@@ -1,6 +1,6 @@
 workSchedule
 Time [HH:MM];Monday;Tuesday;Wednesday;Thursday;Friday;Saturday;Sunday
-08:00;Software Design;Programming;ITO;Technology;Programming;Free;Free;09:00;Software Design;Programming - Canceled;ITO;Technology;Programming;Free;Free
+08:00;ITO;Programming;ITO;Technology;Programming;Free;Free;09:00;free;Programming - Canceled;ITO;Technology;Programming;Free;Free
 waitingList
 Name;Phone Number;Address;Child Name;Child Age
 Will Smith;911;Lime Street;Little Joe;7
