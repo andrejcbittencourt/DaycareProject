@@ -137,10 +137,7 @@ public class RDAS {
           String menuChoice = console.getInput(menuOptions, validMenuInput, "");
           switch (menuChoice) {
             case "1":
-
-
-
-
+              // UC1 - work schedule
               int scheduleListIndex = 0;
               for (Document document: documents){
                 if (document.getName().equals("workSchedule")){
@@ -153,17 +150,9 @@ public class RDAS {
               //option go back
               //check permission
               //option edit if editor
-
-
-
-
-
-
-
               // select day and hour
               String scheduleMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
               if(scheduleMenuChoice.equals("1")) {
-
 
                 scheduleLoop: while(true) {
                   String scheuleValidInput = "[";
@@ -187,11 +176,8 @@ public class RDAS {
                         ArrayList<String> cellData = documents.get(scheduleListIndex).getData();
                         cellData.set(selectedCell,newSchedule);
 
-
-
                         documents.get(scheduleListIndex).setData(cellData);
                         break scheduleLoop;
-
 
                       case "4": // go back
                         break scheduleLoop;
@@ -200,23 +186,10 @@ public class RDAS {
                 }
               } else if(scheduleMenuChoice.equals("2"))
                 break;
-
-
-
-
-
-
               break;
 
-
-
-
-
             case "2":
-
-
-
-
+              // UC2 - phone list
 
               // show phone list
               ArrayList<String> phoneTmp = new ArrayList<>();
@@ -233,9 +206,6 @@ public class RDAS {
               phoneList.setData(phoneTmp);
               phoneList.display(20, 1);
 
-
-
-
               // select number
               String phoneMenuChoice = console.getInput("Choose an action;1- Edit;2- Go back","[12]{1}","");
               if(phoneMenuChoice.equals("1")) {
@@ -245,7 +215,6 @@ public class RDAS {
                     phoneValidInput += i+1;
                   phoneValidInput += "]{1}";
                   String selectedParent = console.getInput("Which parent", phoneValidInput,"");
-
 
                   if(!selectedParent.isEmpty()) {
                     phoneMenuChoice = console.getInput("Choose an action;1- Edit this number;4- Go back", "[1234]{1}", "");
@@ -267,16 +236,7 @@ public class RDAS {
                 }
               } else if(phoneMenuChoice.equals("2"))
                 break;
-
-
-
-
               break;
-
-
-
-
-
 
             case "3":
               // UC3 - Waiting List
